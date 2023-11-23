@@ -19,6 +19,7 @@ const ChatRoom = () => {
     { id: 2, sender: "User2", message: "Hi! How are you?" },
     // Add more dummy messages as needed
   ]);
+  const [isRightBarOpen, setIsRightBarOpen] = useState(false);
   const messageListRef = useRef(null);
 
   useEffect(() => {
@@ -45,9 +46,25 @@ const ChatRoom = () => {
     }
   };
 
+  const handleOptionsClick = () => {
+    setIsRightBarOpen(!isRightBarOpen);
+  };
+
+  const leaveRoom = () => {
+    // Implement the logic for leaving the room
+    alert("Leave Room Clicked");
+  };
+
+  const dummyPeopleInRoom = ["Person1", "Person2", "Person3"]; // Add more people as needed
+
   return (
     <div style={styles.chatRoom}>
-      <div style={styles.title}>Chat Room</div>
+      <div style={styles.title}>
+        Chat Room
+        <div style={styles.optionsButton} onClick={handleOptionsClick}>
+          &#8942;
+        </div>
+      </div>
       <div ref={messageListRef} style={styles.messageList}>
         {messages.map((msg) => (
           <ChatMessage
@@ -71,6 +88,29 @@ const ChatRoom = () => {
           Send
         </button>
       </div>
+
+      <div
+        style={{
+          ...styles.rightBar,
+          transform: `translateX(${isRightBarOpen ? "0%" : "100%"})`,
+          transition: "transform 0.3s ease-in-out",
+        }}
+      >
+        <div style={styles.rightBarHeader}>
+          Leave Room
+          <div style={styles.closeButton} onClick={handleOptionsClick}>
+            X
+          </div>
+        </div>
+        <div style={styles.peopleList}>
+          <div style={styles.peopleListTitle}>People in Room</div>
+          {dummyPeopleInRoom.map((person, index) => (
+            <div key={index} style={styles.person}>
+              {person}
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 };
@@ -92,6 +132,15 @@ const styles = {
     fontSize: "24px",
     fontWeight: "bold",
     marginBottom: "10px",
+    position: "relative",
+  },
+  optionsButton: {
+    position: "absolute",
+    top: 0,
+    right: 0,
+    cursor: "pointer",
+    fontSize: "20px",
+    padding: "5px",
   },
   messageList: {
     flex: "1",
@@ -100,14 +149,17 @@ const styles = {
     display: "flex",
     flexDirection: "column",
     paddingRight: "10px", // Add some padding to the right
-    scrollbarWidth: "none", // Hide scrollbar for Firefox
+    scrollbarWidth: "thin", // Set the scrollbar width
     msOverflowStyle: "none", // Hide scrollbar for IE and Edge
   },
+
   message: {
     marginBottom: "10px",
     padding: "10px",
     borderRadius: "6px",
     maxWidth: "70%",
+    paddingLeft: "10px", // Add padding to the left
+    paddingRight: "10px", // Add padding to the right
   },
   currentUserMessage: {
     alignSelf: "flex-end",
@@ -142,6 +194,42 @@ const styles = {
     border: "none",
     borderRadius: "6px",
     cursor: "pointer",
+  },
+  rightBar: {
+    width: "200px",
+    backgroundColor: "#2c2f33",
+    color: "#fff",
+    position: "fixed",
+    top: "0",
+    right: "0",
+    height: "100%",
+    padding: "20px",
+    boxSizing: "border-box",
+    display: "flex",
+    flexDirection: "column",
+  },
+  rightBarHeader: {
+    fontSize: "16px",
+    fontWeight: "bold",
+    marginBottom: "20px",
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  closeButton: {
+    cursor: "pointer",
+  },
+  peopleList: {
+    flex: "1",
+    overflowY: "auto",
+  },
+  peopleListTitle: {
+    fontSize: "16px",
+    fontWeight: "bold",
+    marginBottom: "10px",
+  },
+  person: {
+    marginBottom: "8px",
   },
 };
 
