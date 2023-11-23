@@ -1,12 +1,14 @@
 import React from "react";
 import CreateRoom from "../CreateRoom/CreateRoom";
 import NameField from "../NameField/NameField";
-import { setUsername } from "../../../REST";
+import InfoBox from "../InfoBox/InfoBox";
+
 const Homepage = () => {
   return (
     <>
-      <NameField onNameChanged={setUsername} />
-      <CreateRoom />
+      {/* <NameField onNameChanged={setUsername} /> */}
+      {/* <CreateRoom /> */}
+      <InfoBox />
     </>
   );
 };

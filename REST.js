@@ -25,19 +25,16 @@ const connectSocket = () => {
   });
 };
 
-const joinRoom = (roomName) => {
+const joinRoom = (roomName, _username) => {
+  userName = _username;
   const data = { roomName: roomName, userName: userName };
-  console.log(`Making Join Room Req With `);
   console.log(data);
   socket.emit("join_room", data);
 };
 
-const createRoom = (roomName) => {
+const createRoom = (roomName, _username) => {
+  userName = _username;
   socket.emit("create_room", { roomName: roomName, userName: userName });
 };
 
-const setUsername = (name) => {
-  userName = name;
-};
-
-export { socket, setUsername, connectSocket, createRoom, joinRoom };
+export { socket, connectSocket, createRoom, joinRoom };
