@@ -80,11 +80,13 @@ const styles = {
     display: "flex",
     flexDirection: "column",
     height: "100vh",
+    margin: "0",
     padding: "20px",
     boxSizing: "border-box",
     backgroundColor: "#36393f",
     color: "#fff",
     fontFamily: "Arial, sans-serif",
+    overflow: "hidden", // Prevents scrolling of the entire page
   },
   title: {
     fontSize: "24px",
@@ -98,7 +100,8 @@ const styles = {
     display: "flex",
     flexDirection: "column",
     paddingRight: "10px", // Add some padding to the right
-    scrollbarWidth: "thin", // Thin scrollbar for Firefox
+    scrollbarWidth: "none", // Hide scrollbar for Firefox
+    msOverflowStyle: "none", // Hide scrollbar for IE and Edge
   },
   message: {
     marginBottom: "10px",
