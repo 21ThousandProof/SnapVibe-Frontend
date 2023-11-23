@@ -1,21 +1,40 @@
-import { BrowserRouter , Routes , Route, Navigate } from "react-router-dom";
-import Navbar from "./Components/Navbar/Navbar"
-import Homepage from "./Components/Homepage/Homepage"
-import Login from "./Components/Login/Login"
+import React, { useEffect, useState } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { connectSocket, createRoom, joinRoom } from "../REST";
+
+import Homepage from "./Components/Homepage/Homepage";
 
 function App() {
-
+  connectSocket();
   return (
-      <BrowserRouter>
-          <Navbar/>
-          <Routes>
-              <Route path='/' element={<Navigate to={'/Homepage'}/>}/>
-              <Route path="/Homepage" element={<Homepage />} />
-              <Route path="/Login" element={<Login />} />
-            
-          </Routes>
-      </BrowserRouter>
-)
+    <BrowserRouter>
+      <Box />
+      <Routes>
+        <Route path="/" element={<Homepage />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
-export default App
+const Box = () => {
+  const [roomName, setRoomName] = useState("");
+
+  const handleJoinRoom = () => {
+    joinRoom(roomName);
+  };
+
+  return (
+    <div className="box-container">
+      <label htmlFor="roomName">Room Name:</label>
+      <input
+        type="text"
+        id="roomName"
+        value={roomName}
+        onChange={(e) => setRoomName(e.target.value)}
+      />
+      <button onClick={handleJoinRoom}>Join Room</button>
+    </div>
+  );
+};
+
+export default App;

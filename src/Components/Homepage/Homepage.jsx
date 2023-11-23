@@ -1,18 +1,14 @@
 import React from "react";
-
-
-
+import CreateRoom from "../CreateRoom/CreateRoom";
+import NameField from "../NameField/NameField";
+import { setUsername } from "../../../REST";
 const Homepage = () => {
-    return (
-        <>
-        <h1>Homepage</h1>    
-        <h2>Welcome, This is a Homepage</h2>
-        </>
-    );
+  return (
+    <>
+      <NameField onNameChanged={setUsername} />
+      <CreateRoom />
+    </>
+  );
 };
-
-
-
-
 
 export default Homepage;
