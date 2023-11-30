@@ -1,5 +1,3 @@
-// InfoBox.jsx
-
 import React, { useState } from "react";
 import { createRoom, joinRoom } from "../../../REST";
 
@@ -62,7 +60,7 @@ const styles = {
     transition: "background-color 0.3s ease",
     overflow: "auto",
     scrollbarWidth: "thin",
-    scrollbarColor: "#4a90e2 #333", // Scrollbar color and dark background color
+    scrollbarColor: "#4a90e2 #333",
     ...{ WebkitOverflowScrolling: "touch" },
   },
   input: {
