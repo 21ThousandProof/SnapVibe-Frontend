@@ -1,14 +1,94 @@
-import React from "react";
-import CreateRoom from "../CreateRoom/CreateRoom";
-import NameField from "../NameField/NameField";
-import { setUsername } from "../../../REST";
+// Homepage.jsx
+
+import React, { useState } from "react";
+import InfoBox from "../InfoBox/InfoBox";
+
 const Homepage = () => {
+  const [isHovered, setIsHovered] = useState(false);
+
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+  };
+
+  const currentYear = new Date().getFullYear();
+
   return (
     <>
-      <NameField onNameChanged={setUsername} />
-      <CreateRoom />
+      <div
+        style={{
+          backgroundColor: "#1e1e1e",
+          height: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          color: "#e6e6e6",
+          margin: 0,
+        }}
+      >
+        <h1
+          style={{
+            ...styles.title,
+            fontSize: isHovered ? "90px" : "90px",
+            transform: isHovered ? "scale(1.1)" : "scale(1)",
+            marginTop: isHovered ? "60px" : "60px",
+          }}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+        >
+          Snap Vibe
+        </h1>
+        <InfoBox style={{ marginTop: isHovered ? "20px" : "20px" }} />{" "}
+        {/* Adjust the margin-top */}
+      </div>
+
+      {/* Footer */}
+      <div
+        style={{
+          position: "fixed",
+          bottom: 0,
+          left: 0,
+          width: "100%",
+          backgroundColor: "#333",
+          color: "#fff",
+          padding: "10px",
+          textAlign: "center",
+        }}
+      >
+        <p style={styles.footer}>
+          © {currentYear} Sushil L, No Rights Reserved |{" "}
+          <a
+            href="https://github.com/21Cash/SnapVibe-Frontend"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={styles.link}
+          >
+            View Source Code
+          </a>
+        </p>
+      </div>
     </>
   );
+};
+
+const styles = {
+  title: {
+    fontWeight: "bold",
+    color: "#4a90e2",
+    cursor: "pointer",
+    transition: "transform 0.3s ease, font-size 0.3s ease",
+  },
+  footer: {
+    margin: 0,
+  },
+  link: {
+    color: "#4a90e2",
+    textDecoration: "none",
+  },
 };
 
 export default Homepage;
