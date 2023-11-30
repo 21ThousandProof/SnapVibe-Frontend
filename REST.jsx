@@ -1,7 +1,7 @@
 import { backendUrl } from "./Constants";
 import { io } from "socket.io-client";
 import { useEffect } from "react";
-import { messagesState } from "./src/GlobalStates";
+import { messagesState, peopleInRoomState } from "./src/GlobalStates";
 import { constSelector, useRecoilState } from "recoil";
 import { useNavigate } from "react-router-dom";
 
@@ -11,6 +11,8 @@ let roomName = "Crystal Xtreme";
 
 const REST = () => {
   const [messages, setMessages] = useRecoilState(messagesState);
+  const [roomList, setRoomList] = useRecoilState(peopleInRoomState);
+
   const navigate = useNavigate();
   useEffect(() => {
     connectSocket();
@@ -45,6 +47,10 @@ const REST = () => {
 
       socket.on("user_left", (data) => {
         handleUserLeft(data.userName);
+      });
+
+      socket.on("room_list", (data) => {
+        setRoomList(data.list);
       });
     });
 

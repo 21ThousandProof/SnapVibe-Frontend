@@ -9,4 +9,9 @@ const messagesState = atom({
   ],
 });
 
+export const peopleInRoomState = atom({
+  key: "peopleInRoomState",
+  default: ["BEANS", "CURRY", "LOELO"], // Initial value is an empty array
+});
+
 export { messagesState };

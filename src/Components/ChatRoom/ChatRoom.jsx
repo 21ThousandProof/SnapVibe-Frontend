@@ -6,7 +6,7 @@ import {
   getUsername,
   leaveRoom,
 } from "../../../REST";
-import { messagesState } from "../../GlobalStates";
+import { messagesState, peopleInRoomState } from "../../GlobalStates";
 import { useNavigate } from "react-router-dom";
 
 const ChatMessage = ({ sender, message, isCurrentUser }) => {
@@ -39,10 +39,12 @@ const ChatMessage = ({ sender, message, isCurrentUser }) => {
     </div>
   );
 };
+
 const ChatRoom = () => {
   const [newMessage, setNewMessage] = useState("");
   const [messages, setMessages] = useRecoilState(messagesState);
   const [isRightBarOpen, setIsRightBarOpen] = useState(false);
+  const [peopleInRoom, setPeopleInRoom] = useRecoilState(peopleInRoomState); // Recoil state for people in the room
   const messageListRef = useRef(null);
   const textareaRef = useRef(null);
   const navigate = useNavigate();
@@ -50,6 +52,21 @@ const ChatRoom = () => {
   useEffect(() => {
     messageListRef.current.scrollTop = messageListRef.current.scrollHeight;
   }, [messages]);
+
+  useEffect(() => {
+    // Update people list when component mounts or peopleInRoom changes
+    // You can add additional logic here if needed
+  }, [peopleInRoom]);
+
+  const addUser = (username) => {
+    setPeopleInRoom((prevPeople) => [...prevPeople, username]);
+  };
+
+  const removeUser = (username) => {
+    setPeopleInRoom((prevPeople) =>
+      prevPeople.filter((person) => person !== username)
+    );
+  };
 
   const handleSendMessage = () => {
     if (newMessage !== "") {
@@ -59,12 +76,9 @@ const ChatRoom = () => {
         message: newMessage,
       };
 
-      // Emit Mesage
+      // Emit Message
       emitMessage(newMessage);
 
-      // Do not directly push current msg, wait for server response
-
-      // setMessages([...messages, newMessageObj]);
       setNewMessage("");
 
       // Reset the textarea height after sending a message
@@ -105,15 +119,16 @@ const ChatRoom = () => {
     setIsRightBarOpen(!isRightBarOpen);
   };
 
-  const leave_room = () => {
+  const leaveRoomHandler = () => {
     navigate("/");
     leaveRoom();
+    // Remove the current user from the people in the room
+    removeUser(getUsername());
   };
 
   return (
     <div style={styles.chatRoom}>
       <div style={styles.title}>
-        {/* Chat Room */}
         {getRoomName()}
         <div style={styles.optionsButton} onClick={handleOptionsClick}>
           &#8942;
@@ -159,17 +174,21 @@ const ChatRoom = () => {
             X
           </div>
         </div>
-        <button style={styles.leaveRoomButton} onClick={leave_room}>
+        <button style={styles.leaveRoomButton} onClick={leaveRoomHandler}>
           Leave Room
         </button>
         <div style={styles.peopleList}>
           <div style={styles.peopleListTitle}>People in Room</div>
+          {peopleInRoom.map((person, index) => (
+            <div key={index} style={styles.person}>
+              {person}
+            </div>
+          ))}
         </div>
       </div>
     </div>
   );
 };
-
 const styles = {
   chatRoom: {
     display: "flex",
