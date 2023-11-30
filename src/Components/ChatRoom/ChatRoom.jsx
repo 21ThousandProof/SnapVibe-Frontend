@@ -79,12 +79,9 @@ const ChatRoom = () => {
       // Emit Message
       emitMessage(newMessage);
 
-      setNewMessage("");
+      textareaRef.current.style.height = "40px";
 
-      // Reset the textarea height after sending a message
-      if (textareaRef.current) {
-        textareaRef.current.style.height = "auto";
-      }
+      setNewMessage("");
     }
   };
 
@@ -101,15 +98,18 @@ const ChatRoom = () => {
 
       // Reset the textarea height after handling Enter key press
       handleTextareaChange();
-
       e.preventDefault(); // Prevent the default behavior of Enter key
     }
   };
 
   const handleTextareaChange = () => {
+    const numberOfNewLines = (newMessage.match(/\n/g) || []).length;
+    if (numberOfNewLines <= 2) {
+      textareaRef.current.style.height = "40px";
+      return;
+    }
     // Adjust the textarea height based on the content
     if (textareaRef.current) {
-      textareaRef.current.style.height = "auto";
       textareaRef.current.style.height =
         textareaRef.current.scrollHeight + "px";
     }
@@ -287,6 +287,7 @@ const styles = {
     maxHeight: "300px", // Set a maximum height for the textarea
     resize: "none", // Disable textarea resizing
     whiteSpace: "pre-wrap", // Preserve whitespace, including new lines
+    height: "40px",
   },
 
   sendButton: {
