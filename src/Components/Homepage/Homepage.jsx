@@ -60,7 +60,7 @@ const Homepage = () => {
         }}
       >
         <p style={styles.footer}>
-          © {currentYear} Sushil L, All Rights Reserved |{" "}
+          © {currentYear} Sushil L, No Rights Reserved |{" "}
           <a
             href="https://github.com/21Cash/SnapVibe-Frontend"
             target="_blank"
