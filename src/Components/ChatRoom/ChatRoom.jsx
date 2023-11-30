@@ -9,8 +9,21 @@ import {
 import { messagesState, peopleInRoomState } from "../../GlobalStates";
 import { useNavigate } from "react-router-dom";
 
-const ChatMessage = ({ sender, message, isCurrentUser }) => {
+const ChatMessage = ({ id, sender, message, isCurrentUser }) => {
   const isServerMessage = sender === "SERVER";
+  const [isCopied, setIsCopied] = useState(false);
+
+  const handleContextMenu = (e) => {
+    if (!isServerMessage) {
+      e.preventDefault();
+      navigator.clipboard.writeText(message);
+      setIsCopied(true);
+
+      setTimeout(() => {
+        setIsCopied(false);
+      }, 2000);
+    }
+  };
 
   return (
     <div
@@ -22,6 +35,7 @@ const ChatMessage = ({ sender, message, isCurrentUser }) => {
           ? styles.serverMessageContainer
           : styles.otherUserMessage),
       }}
+      onContextMenu={handleContextMenu}
     >
       {isServerMessage && (
         <div style={styles.serverMessageLabel}>
@@ -36,6 +50,7 @@ const ChatMessage = ({ sender, message, isCurrentUser }) => {
           <div key={index}>{line}</div>
         ))}
       </div>
+      {isCopied && <div style={styles.copiedMessage}>Copied!</div>}
     </div>
   );
 };
@@ -52,11 +67,6 @@ const ChatRoom = () => {
   useEffect(() => {
     messageListRef.current.scrollTop = messageListRef.current.scrollHeight;
   }, [messages]);
-
-  useEffect(() => {
-    // Update people list when component mounts or peopleInRoom changes
-    // You can add additional logic here if needed
-  }, [peopleInRoom]);
 
   const addUser = (username) => {
     setPeopleInRoom((prevPeople) => [...prevPeople, username]);
