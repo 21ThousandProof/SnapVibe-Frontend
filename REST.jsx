@@ -36,19 +36,30 @@ const REST = () => {
       });
 
       socket.on("room_join_failed", (data) => {
-        console.log("Room Join failed");
+        alert(data.msg);
       });
 
       socket.on("user_joined", (data) => {
-        console.log(`${data} Joined`);
+        handleUserJoined(data.userName);
+      });
+
+      socket.on("user_left", (data) => {
+        handleUserLeft(data.userName);
       });
     });
 
     const handleRoomJoined = () => {
+      setMessages([]);
       navigate("/ChatRoom");
     };
   };
+  const handleUserLeft = (name) => {
+    handleMessage("SERVER", `${name} Left The Room`);
+  };
 
+  const handleUserJoined = (name) => {
+    handleMessage("SERVER", `${name} Joined The Room`);
+  };
   const handleMessage = (sender, msg) => {
     setMessages((prevMessages) => [
       ...prevMessages,
@@ -78,6 +89,10 @@ const createRoom = (roomName, _username) => {
   socket.emit("create_room", { roomName: roomName, userName: userName });
 };
 
+const leaveRoom = () => {
+  socket.emit("leave_room");
+};
+
 const getRoomName = () => {
   return roomName;
 };
@@ -94,4 +109,5 @@ export {
   joinRoom,
   REST,
   emitMessage,
+  leaveRoom,
 };

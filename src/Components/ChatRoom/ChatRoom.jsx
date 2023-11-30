@@ -1,7 +1,13 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useRecoilState } from "recoil";
-import { emitMessage, getRoomName, getUsername } from "../../../REST";
+import {
+  emitMessage,
+  getRoomName,
+  getUsername,
+  leaveRoom,
+} from "../../../REST";
 import { messagesState } from "../../GlobalStates";
+import { useNavigate } from "react-router-dom";
 
 const ChatMessage = ({ sender, message, isCurrentUser }) => (
   <div
@@ -25,6 +31,7 @@ const ChatRoom = () => {
   const [isRightBarOpen, setIsRightBarOpen] = useState(false);
   const messageListRef = useRef(null);
   const textareaRef = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     messageListRef.current.scrollTop = messageListRef.current.scrollHeight;
@@ -84,9 +91,9 @@ const ChatRoom = () => {
     setIsRightBarOpen(!isRightBarOpen);
   };
 
-  const leaveRoom = () => {
-    // Implement the logic for leaving the room
-    alert("Leave Room Clicked");
+  const leave_room = () => {
+    navigate("/");
+    leaveRoom();
   };
 
   return (
@@ -138,7 +145,7 @@ const ChatRoom = () => {
             X
           </div>
         </div>
-        <button style={styles.leaveRoomButton} onClick={leaveRoom}>
+        <button style={styles.leaveRoomButton} onClick={leave_room}>
           Leave Room
         </button>
         <div style={styles.peopleList}>
