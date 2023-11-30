@@ -269,6 +269,7 @@ const styles = {
     color: "#ccc",
   },
   messageText: {
+    whiteSpace: "pre",
     overflowY: "auto",
     maxHeight: "200px", // Adjust the maximum height as needed
   },
