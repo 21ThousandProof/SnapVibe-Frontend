@@ -55,13 +55,11 @@ const styles = {
     borderRadius: "10px",
     backgroundColor: "#333", // Dark background color
     boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
-    width: "500px",
-    margin: "auto",
+    width: "100%", // Set width to 100% for responsiveness
+    maxWidth: "500px", // Set a maximum width for the container
+    boxSizing: "border-box",
+    margin: "30px",
     transition: "background-color 0.3s ease",
-    overflow: "auto",
-    scrollbarWidth: "thin",
-    scrollbarColor: "#4a90e2 #333",
-    ...{ WebkitOverflowScrolling: "touch" },
   },
   input: {
     margin: "10px 0",
@@ -85,13 +83,15 @@ const styles = {
     transition: "background-color 0.3s ease",
   },
   createButton: {
-    width: "220px", // Adjust the width as needed
+    width: "100%", // Adjust the width as needed
+    maxWidth: "220px", // Set a maximum width for the button
     "&:hover": {
       background: "#185a9d", // Darker blue color on hover
     },
   },
   joinButton: {
-    width: "220px", // Adjust the width as needed
+    width: "100%", // Adjust the width as needed
+    maxWidth: "220px", // Set a maximum width for the button
     "&:hover": {
       background: "#185a9d", // Darker blue color on hover
     },

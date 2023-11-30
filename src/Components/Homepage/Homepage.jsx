@@ -21,13 +21,15 @@ const Homepage = () => {
       <div
         style={{
           backgroundColor: "#1e1e1e",
-          height: "100vh",
+          minHeight: "100vh",
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
           color: "#e6e6e6",
           margin: 0,
+          padding: "10px",
+          boxSizing: "border-box",
         }}
       >
         <h1
@@ -35,15 +37,19 @@ const Homepage = () => {
             ...styles.title,
             fontSize: isHovered ? "90px" : "90px",
             transform: isHovered ? "scale(1.1)" : "scale(1)",
-            marginTop: isHovered ? "60px" : "60px",
+            marginTop: isHovered ? "0px" : "0px",
           }}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         >
           Snap Vibe
         </h1>
-        <InfoBox style={{ marginTop: isHovered ? "20px" : "20px" }} />{" "}
-        {/* Adjust the margin-top */}
+        <InfoBox
+          style={{
+            marginTop: isHovered ? "0px" : "0px",
+            transform: isHovered ? "scale(1.1)" : "scale(1)",
+          }}
+        />
       </div>
 
       {/* Footer */}
@@ -57,6 +63,7 @@ const Homepage = () => {
           color: "#fff",
           padding: "10px",
           textAlign: "center",
+          boxSizing: "border-box",
         }}
       >
         <p style={styles.footer}>
