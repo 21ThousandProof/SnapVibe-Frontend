@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { connectSocket, createRoom, joinRoom } from "../REST";
-
+import { REST } from "../REST";
 import Homepage from "./Components/Homepage/Homepage";
 import ChatRoom from "./Components/ChatRoom/ChatRoom";
+import Debug from "./Debug";
+
 function App() {
-  connectSocket();
   return (
     <BrowserRouter>
+      <REST />
+
       <Routes>
         <Route path="/" element={<Homepage />} />
         <Route path="/ChatRoom" element={<ChatRoom />} />

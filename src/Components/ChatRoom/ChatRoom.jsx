@@ -1,4 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
+import { useRecoilState } from "recoil";
+import { emitMessage, getRoomName, getUsername } from "../../../REST";
+import { messagesState } from "../../GlobalStates";
 
 const ChatMessage = ({ sender, message, isCurrentUser }) => (
   <div
@@ -8,41 +11,72 @@ const ChatMessage = ({ sender, message, isCurrentUser }) => (
     }}
   >
     <div style={styles.messageHeader}>{isCurrentUser ? "You" : sender}</div>
-    {message}
+    <div style={styles.messageText}>
+      {message.split("\n").map((line, index) => (
+        <div key={index}>{line}</div>
+      ))}
+    </div>
   </div>
 );
 
 const ChatRoom = () => {
   const [newMessage, setNewMessage] = useState("");
-  const [messages, setMessages] = useState([
-    { id: 1, sender: "User1", message: "Hello there!" },
-    { id: 2, sender: "User2", message: "Hi! How are you?" },
-    // Add more dummy messages as needed
-  ]);
+  const [messages, setMessages] = useRecoilState(messagesState);
   const [isRightBarOpen, setIsRightBarOpen] = useState(false);
   const messageListRef = useRef(null);
+  const textareaRef = useRef(null);
 
   useEffect(() => {
-    // Scroll to the bottom of the message list when a new message is added
     messageListRef.current.scrollTop = messageListRef.current.scrollHeight;
   }, [messages]);
 
   const handleSendMessage = () => {
-    if (newMessage.trim() !== "") {
+    if (newMessage !== "") {
       const newMessageObj = {
         id: messages.length + 1,
         sender: "CurrentUser", // You can replace this with the actual sender name
         message: newMessage,
       };
 
-      setMessages([...messages, newMessageObj]);
+      // Emit Mesage
+      emitMessage(newMessage);
+
+      // Do not directly push current msg, wait for server response
+
+      // setMessages([...messages, newMessageObj]);
       setNewMessage("");
+
+      // Reset the textarea height after sending a message
+      if (textareaRef.current) {
+        textareaRef.current.style.height = "auto";
+      }
     }
   };
 
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
-      handleSendMessage();
+      // Check if Shift key is pressed along with Enter
+      if (e.shiftKey) {
+        // Add a new line to the current message
+        setNewMessage((prevMessage) => prevMessage + "\n");
+      } else {
+        // Send the message if Shift key is not pressed
+        handleSendMessage();
+      }
+
+      // Reset the textarea height after handling Enter key press
+      handleTextareaChange();
+
+      e.preventDefault(); // Prevent the default behavior of Enter key
+    }
+  };
+
+  const handleTextareaChange = () => {
+    // Adjust the textarea height based on the content
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto";
+      textareaRef.current.style.height =
+        textareaRef.current.scrollHeight + "px";
     }
   };
 
@@ -55,12 +89,11 @@ const ChatRoom = () => {
     alert("Leave Room Clicked");
   };
 
-  const dummyPeopleInRoom = ["Person1", "Person2", "Person3"]; // Add more people as needed
-
   return (
     <div style={styles.chatRoom}>
       <div style={styles.title}>
-        Chat Room
+        {/* Chat Room */}
+        {getRoomName()}
         <div style={styles.optionsButton} onClick={handleOptionsClick}>
           &#8942;
         </div>
@@ -71,17 +104,20 @@ const ChatRoom = () => {
             key={msg.id}
             sender={msg.sender}
             message={msg.message}
-            isCurrentUser={msg.sender === "CurrentUser"}
+            isCurrentUser={msg.sender === getUsername()}
           />
         ))}
       </div>
       <div style={styles.inputContainer}>
-        <input
-          type="text"
+        <textarea
+          ref={textareaRef}
           placeholder="Type your message..."
           value={newMessage}
-          onChange={(e) => setNewMessage(e.target.value)}
-          onKeyPress={handleKeyPress}
+          onChange={(e) => {
+            setNewMessage(e.target.value);
+            handleTextareaChange();
+          }}
+          onKeyDown={handleKeyPress}
           style={styles.input}
         />
         <button onClick={handleSendMessage} style={styles.sendButton}>
@@ -97,18 +133,16 @@ const ChatRoom = () => {
         }}
       >
         <div style={styles.rightBarHeader}>
-          Leave Room
+          <span> Room</span>
           <div style={styles.closeButton} onClick={handleOptionsClick}>
             X
           </div>
         </div>
+        <button style={styles.leaveRoomButton} onClick={leaveRoom}>
+          Leave Room
+        </button>
         <div style={styles.peopleList}>
           <div style={styles.peopleListTitle}>People in Room</div>
-          {dummyPeopleInRoom.map((person, index) => (
-            <div key={index} style={styles.person}>
-              {person}
-            </div>
-          ))}
         </div>
       </div>
     </div>
@@ -152,7 +186,6 @@ const styles = {
     scrollbarWidth: "thin", // Set the scrollbar width
     msOverflowStyle: "none", // Hide scrollbar for IE and Edge
   },
-
   message: {
     marginBottom: "10px",
     padding: "10px",
@@ -160,6 +193,7 @@ const styles = {
     maxWidth: "70%",
     paddingLeft: "10px", // Add padding to the left
     paddingRight: "10px", // Add padding to the right
+    overflowWrap: "break-word", // Allow words to break and wrap onto the next line
   },
   currentUserMessage: {
     alignSelf: "flex-end",
@@ -175,6 +209,10 @@ const styles = {
     marginBottom: "5px",
     color: "#ccc",
   },
+  messageText: {
+    overflowY: "auto",
+    maxHeight: "200px", // Adjust the maximum height as needed
+  },
   inputContainer: {
     display: "flex",
     alignItems: "center",
@@ -186,7 +224,12 @@ const styles = {
     marginRight: "10px",
     border: "1px solid #bdc3c7",
     boxSizing: "border-box",
+    minHeight: "2px", // Set a minimum height for the textarea (adjust as needed)
+    maxHeight: "300px", // Set a maximum height for the textarea
+    resize: "none", // Disable textarea resizing
+    whiteSpace: "pre-wrap", // Preserve whitespace, including new lines
   },
+
   sendButton: {
     background: "#2ecc71",
     color: "#fff",
@@ -218,6 +261,16 @@ const styles = {
   },
   closeButton: {
     cursor: "pointer",
+  },
+  leaveRoomButton: {
+    cursor: "pointer",
+    color: "white",
+    backgroundColor: "#FF3333", // Red color
+    padding: "5px", // Increased padding
+    marginBottom: "15px",
+    borderRadius: "3px", // Make it a square
+    border: "none",
+    width: "100%", // Make it a square
   },
   peopleList: {
     flex: "1",
