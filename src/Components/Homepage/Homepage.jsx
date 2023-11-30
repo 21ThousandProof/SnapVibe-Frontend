@@ -1,11 +1,15 @@
 // Homepage.jsx
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import InfoBox from "../InfoBox/InfoBox";
+import { resetDetails } from "../../../REST";
 
 const Homepage = () => {
   const [isHovered, setIsHovered] = useState(false);
 
+  useEffect(() => {
+    resetDetails();
+  }, []);
   const handleMouseEnter = () => {
     setIsHovered(true);
   };

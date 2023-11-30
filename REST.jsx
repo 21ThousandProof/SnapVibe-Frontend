@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 let socket;
 let userName;
-let roomName = "Crystal Xtreme";
+let roomName = "";
 
 const REST = () => {
   const [messages, setMessages] = useRecoilState(messagesState);
@@ -107,6 +107,13 @@ const getUsername = () => {
   return userName;
 };
 
+const resetDetails = () => {
+  userName = "";
+  if (roomName) {
+    leaveRoom();
+  }
+};
+
 export {
   socket,
   getRoomName,
@@ -116,4 +123,5 @@ export {
   REST,
   emitMessage,
   leaveRoom,
+  resetDetails,
 };
