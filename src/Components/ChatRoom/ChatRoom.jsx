@@ -9,22 +9,36 @@ import {
 import { messagesState } from "../../GlobalStates";
 import { useNavigate } from "react-router-dom";
 
-const ChatMessage = ({ sender, message, isCurrentUser }) => (
-  <div
-    style={{
-      ...styles.message,
-      ...(isCurrentUser ? styles.currentUserMessage : styles.otherUserMessage),
-    }}
-  >
-    <div style={styles.messageHeader}>{isCurrentUser ? "You" : sender}</div>
-    <div style={styles.messageText}>
-      {message.split("\n").map((line, index) => (
-        <div key={index}>{line}</div>
-      ))}
-    </div>
-  </div>
-);
+const ChatMessage = ({ sender, message, isCurrentUser }) => {
+  const isServerMessage = sender === "SERVER";
 
+  return (
+    <div
+      style={{
+        ...styles.message,
+        ...(isCurrentUser
+          ? styles.currentUserMessage
+          : isServerMessage
+          ? styles.serverMessageContainer
+          : styles.otherUserMessage),
+      }}
+    >
+      {isServerMessage && (
+        <div style={styles.serverMessageLabel}>
+          {isCurrentUser ? "You" : ""}
+        </div>
+      )}
+      {!isServerMessage && (
+        <div style={styles.messageHeader}>{isCurrentUser ? "You" : sender}</div>
+      )}
+      <div style={styles.messageText}>
+        {message.split("\n").map((line, index) => (
+          <div key={index}>{line}</div>
+        ))}
+      </div>
+    </div>
+  );
+};
 const ChatRoom = () => {
   const [newMessage, setNewMessage] = useState("");
   const [messages, setMessages] = useRecoilState(messagesState);
@@ -201,6 +215,25 @@ const styles = {
     paddingLeft: "10px", // Add padding to the left
     paddingRight: "10px", // Add padding to the right
     overflowWrap: "break-word", // Allow words to break and wrap onto the next line
+  },
+  serverMessageContainer: {
+    alignSelf: "center", // Align in the center
+    backgroundColor: "#ccc", // Greyish background color
+    color: "#000", // Text color for server messages
+    fontWeight: "bold", // Make the text bold
+    position: "relative", // Enable positioning for the label
+  },
+  serverMessageLabel: {
+    position: "absolute",
+    top: 0,
+    left: "50%",
+    transform: "translateX(-50%)",
+    background: "#ccc",
+    color: "#000",
+    padding: "5px",
+    borderRadius: "6px",
+    fontWeight: "bold",
+    fontSize: "12px",
   },
   currentUserMessage: {
     alignSelf: "flex-end",
