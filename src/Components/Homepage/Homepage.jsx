@@ -1,5 +1,3 @@
-// Homepage.jsx
-
 import React, { useEffect, useState } from "react";
 import InfoBox from "../InfoBox/InfoBox";
 import { resetDetails } from "../../../REST";
@@ -10,6 +8,7 @@ const Homepage = () => {
   useEffect(() => {
     resetDetails();
   }, []);
+
   const handleMouseEnter = () => {
     setIsHovered(true);
   };
@@ -17,8 +16,6 @@ const Homepage = () => {
   const handleMouseLeave = () => {
     setIsHovered(false);
   };
-
-  const currentYear = new Date().getFullYear();
 
   return (
     <>
@@ -57,31 +54,7 @@ const Homepage = () => {
       </div>
 
       {/* Footer */}
-      <div
-        style={{
-          position: "fixed",
-          bottom: 0,
-          left: 0,
-          width: "100%",
-          backgroundColor: "#333",
-          color: "#fff",
-          padding: "10px",
-          textAlign: "center",
-          boxSizing: "border-box",
-        }}
-      >
-        <p style={styles.footer}>
-          © {currentYear} Sushil L, No Rights Reserved |{" "}
-          <a
-            href="https://github.com/21Cash/SnapVibe-Frontend"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={styles.link}
-          >
-            View Source Code
-          </a>
-        </p>
-      </div>
+      <Footer />
     </>
   );
 };
@@ -100,6 +73,38 @@ const styles = {
     color: "#4a90e2",
     textDecoration: "none",
   },
+};
+
+const Footer = () => {
+  const currentYear = new Date().getFullYear();
+
+  return (
+    <div
+      style={{
+        position: "fixed",
+        bottom: 0,
+        left: 0,
+        width: "100%",
+        backgroundColor: "#333",
+        color: "#fff",
+        padding: "10px",
+        textAlign: "center",
+        boxSizing: "border-box",
+      }}
+    >
+      <p style={styles.footer}>
+        © {currentYear} Sushil L, No Rights Reserved |{" "}
+        <a
+          href="https://github.com/21Cash/SnapVibe-Frontend"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={styles.link}
+        >
+          View Source Code
+        </a>
+      </p>
+    </div>
+  );
 };
 
 export default Homepage;
