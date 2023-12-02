@@ -279,9 +279,10 @@ const styles = {
     color: "#ccc",
   },
   messageText: {
-    whiteSpace: "pre",
+    // whiteSpace: "normal",
+    whiteSpace: "pre-wrap",
     overflowY: "auto",
-    maxHeight: "200px", // Adjust the maximum height as needed
+    maxHeight: "200px",
   },
   inputContainer: {
     display: "flex",
