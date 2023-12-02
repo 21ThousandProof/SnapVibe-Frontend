@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import InfoBox from "../InfoBox/InfoBox";
 import { resetDetails } from "../../../REST";
+import ServerStatus from "../ServerStatus/ServerStatus";
 
 const Homepage = () => {
   const [isHovered, setIsHovered] = useState(false);
@@ -19,6 +20,7 @@ const Homepage = () => {
 
   return (
     <>
+      <Header />
       <div
         style={{
           backgroundColor: "#1e1e1e",
@@ -56,6 +58,30 @@ const Homepage = () => {
       {/* Footer */}
       <Footer />
     </>
+  );
+};
+
+const Header = () => {
+  return (
+    <div
+      style={{
+        backgroundColor: "#333",
+        color: "#4a90e2",
+        padding: "10px",
+        textAlign: "center",
+        boxSizing: "border-box",
+        height: "40px",
+        position: "fixed",
+        top: 0,
+        left: 0,
+        right: 0,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+      }}
+    >
+      <div style={{ flex: 1 }}></div> <ServerStatus />
+    </div>
   );
 };
 
