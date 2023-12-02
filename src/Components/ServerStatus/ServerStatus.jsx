@@ -8,7 +8,7 @@ const ServerStatus = () => {
       try {
         console.log("Pinging Server");
         setServerStatus("Checking Status...");
-        const response = await fetch(`${backendUrl}`);
+        const response = await fetch(`${backendUrl}/test`);
         if (response.ok) {
           console.log("Ping Success");
           setServerStatus("Online");
